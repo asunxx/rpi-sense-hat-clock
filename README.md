@@ -9,3 +9,6 @@
   The time of day display on the sense hat's 8x8 RGB LED matrix is
   unique for every second around the clock. Any exact hh:mm:ss time
   is visually discernable at any time.
+
+![Screenshot of time display 5:46:35](assets/images/Clock2.time.05.46.35.png)
+Time display for 5:46:35.5
