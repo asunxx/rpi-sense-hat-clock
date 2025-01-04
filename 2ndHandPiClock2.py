@@ -2,7 +2,7 @@
 
 """
   Second Hand Pi Clock (2ndHandPiClock2.py)
-  asun.net 1/2/2025
+  asun.net 1/4/2025
 
   Raspberry Pi sense hat 12 hour time of day clock with
   digital or analog hours, analog minutes, and analog seconds.
@@ -31,6 +31,14 @@ def rotLeftArr(arr, d):
     revArr(arr, 0, d - 1)
     revArr(arr, d, n - 1)
     revArr(arr, 0, n - 1)
+
+# Rotate Right Array by k times
+def rotRightArr(arr, k):
+    n = len(arr)
+    k %= n
+    revArr(arr, 0, n - 1)
+    revArr(arr, 0, k - 1)
+    revArr(arr, k, n - 1)
 
 
 sense = SenseHat()
@@ -172,6 +180,9 @@ while True:
       image[ring2[(hour-1+12)%12]] = red
       image[ring3[int((hour+1)/3)%4]] = red
       image[ring3[(int((hour+1)/3)-1+4)%4]] = red
+      image[ring1[int((hour%12)*20/12)]] = red
+      if hour%3 == 0:
+        image[ring1[(int((hour%12)*20/12)-1+20)%20]] = red
 
 # minutes
     if minute%3 == 2:
