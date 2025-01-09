@@ -222,31 +222,34 @@ while True:
 
 # seconds
     if showSecond > 0:
-      qtr = int(second/15)
       if (showSecond == 2 or showSecond == 3):
-        qtr = int((second+6)/15)
+        ringPos   = (int((second+6)/15)+int(second/3))%24
+      else:
+        ringPos   = (int(second/15)+int(second/3))%24
+      ringPosNext = (ringPos+1)%24
+      ringPosPrev = (ringPos-1+24)%24
       if second%3 == 2:
-        image[ring0[(qtr+int(second/3)+1)%24]] = white
-        image[ring0[qtr+int(second/3)]] = green
+        image[ring0[ringPosNext]] = white
+        image[ring0[ringPos]] = green
       else:
         if showSecond == 1 or second > 2:
-          image[ring0[qtr+int(second/3)]] = white
+          image[ring0[ringPos]] = white
         if second%3 == 1:
-          image[ring0[(qtr+int(second/3)+1)%24]] = green
+          image[ring0[ringPosNext]] = green
         else:
           if ((showSecond == 1 and second%15 != 0) or
               (showSecond == 2 and (second == 0 or second == 3)) or
               (showSecond == 3 and second == 3)):
-            image[ring0[(qtr+int(second/3)-1+24)%24]] = yellowlite
+            image[ring0[ringPosPrev]] = yellowlite
           else:
-            image[ring0[(qtr+int(second/3)-1+24)%24]] = white
+            image[ring0[ringPosPrev]] = white
+      ringPosPrev2 = (ringPos-2+24)%24
       if showSecond == 1 and second%15 == 0:
-        image[ring0[(qtr*6-2+24)%24]] = yellowlite
-      elif showSecond == 1 and (second+14)%15 == 0:
-        image[ring0[(qtr*6-1+24)%24]] = yellowlite
-      elif ((showSecond == 2 or showSecond == 3) and
-            (second+6)%15 == 0):
-        image[ring0[(qtr*6-4+24)%24]] = white
+        image[ring0[ringPosPrev2]] = yellowlite
+      elif showSecond == 1 and (second-1+15)%15 == 0:
+        image[ring0[ringPosPrev]] = yellowlite
+      elif ((showSecond == 2 or showSecond == 3) and (second+6)%15 == 0):
+        image[ring0[ringPosPrev2]] = white
 
 # 1/2 second
     if msecond >= 500:
