@@ -236,15 +236,15 @@ while True:
         if second%3 == 1:
           image[ring0[ringPosNext]] = green
         if ((showSecond == 1 and second%15 != 0) or
-            (showSecond == 2 and (second == 0 or second == 3)) or
-            (showSecond == 3 and second == 3)):
+            (showSecond == 2 and second <= 4) or
+            (showSecond == 3 and 0 < second <= 4)):
           image[ring0[ringPosPrev]] = yellowlite
         else:
           image[ring0[ringPosPrev]] = white
       ringPosPrev2 = (ringPos-2+24)%24
       if showSecond == 1 and second%15 == 0:
         image[ring0[ringPosPrev2]] = yellowlite
-      elif ((showSecond == 2 or showSecond == 3) and (second+6)%15 == 0):
+      elif ((2 <= showSecond <= 3) and (second+6)%15 == 0):
         image[ring0[ringPosPrev2]] = white
 
 # 1/2 second
