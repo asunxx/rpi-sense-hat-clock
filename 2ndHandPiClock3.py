@@ -106,8 +106,7 @@ number3x5 = [
  1,0,1,
  1,1,1,
  0,0,1,
- 1,1,1
-]
+ 1,1,1 ]
 
 red   = [255,  0,  0]
 green = [  0,255,  0]
@@ -236,18 +235,15 @@ while True:
           image[ring0[ringPos]] = white
         if second%3 == 1:
           image[ring0[ringPosNext]] = green
+        if ((showSecond == 1 and second%15 != 0) or
+            (showSecond == 2 and (second == 0 or second == 3)) or
+            (showSecond == 3 and second == 3)):
+          image[ring0[ringPosPrev]] = yellowlite
         else:
-          if ((showSecond == 1 and second%15 != 0) or
-              (showSecond == 2 and (second == 0 or second == 3)) or
-              (showSecond == 3 and second == 3)):
-            image[ring0[ringPosPrev]] = yellowlite
-          else:
-            image[ring0[ringPosPrev]] = white
+          image[ring0[ringPosPrev]] = white
       ringPosPrev2 = (ringPos-2+24)%24
       if showSecond == 1 and second%15 == 0:
         image[ring0[ringPosPrev2]] = yellowlite
-      elif showSecond == 1 and (second-1+15)%15 == 0:
-        image[ring0[ringPosPrev]] = yellowlite
       elif ((showSecond == 2 or showSecond == 3) and (second+6)%15 == 0):
         image[ring0[ringPosPrev2]] = white
 
