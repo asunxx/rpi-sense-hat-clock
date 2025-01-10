@@ -2,7 +2,7 @@
 
 """
   Second Hand Pi Clock (2ndHandPiClock3.py)
-  asun.net 1/9/2025
+  asun.net 1/10/2025
 
   Raspberry Pi sense hat 12 hour time of day clock with
   digital or analog hours, analog minutes, and analog seconds.
@@ -21,7 +21,6 @@
 showSecond = 2  #  0 disable
   #  1 walking dot
   #  2 accumulating seconds ring resetting at 0
-  #  3 accumulating resetting at 1 second
 showHour   = 1  #  0 disable
   #  1 digital
   #  2 analog
@@ -57,26 +56,26 @@ def rotRightArr(arr, k):
 sense = SenseHat()
 
 number3x5 = [
- 1,1,1, #zero
+ 0,1,0, #zero
  1,0,1,
  1,0,1,
  1,0,1,
- 1,1,1,
+ 0,1,0,
  0,1,0, #one
+ 1,1,0,
  0,1,0,
  0,1,0,
  0,1,0,
- 0,1,0,
- 1,1,1, #two
+ 0,1,0, #two
+ 1,0,1,
  0,0,1,
+ 0,1,0,
  1,1,1,
- 1,0,0,
- 1,1,1,
- 1,1,1, #three
+ 1,1,0, #three
  0,0,1,
- 0,1,1,
+ 0,1,0,
  0,0,1,
- 1,1,1,
+ 1,1,0,
  1,0,0, #four
  1,0,1,
  1,1,1,
@@ -106,6 +105,21 @@ number3x5 = [
  1,0,1,
  1,1,1,
  0,0,1,
+ 1,1,1,
+ 1,1,1, #ten
+ 1,0,1,
+ 1,0,1,
+ 1,0,1,
+ 1,1,1,
+ 0,1,0, #eleven
+ 0,1,0,
+ 0,1,0,
+ 0,1,0,
+ 0,1,0,
+ 1,1,1, #twelve
+ 0,0,1,
+ 1,1,1,
+ 1,0,0,
  1,1,1 ]
 
 red   = [255,  0,  0]
@@ -177,8 +191,7 @@ while True:
       for r in range(1, 7):
         for c in range(1, 7):
           image[r*8+c] = black
-    if ((second == 0 and showSecond == 2) or
-        (second == 1 and showSecond == 3)):
+    if second == 0 and showSecond == 2:
       for c in range(24):
         image[ring0[c]] = yellowlite
 
@@ -193,7 +206,7 @@ while True:
         pixpos1 = pixpos1 + 1
       for r in range(5):
         for c in range(3):
-          if number3x5[(hour12%10)*15+r*3+c] == 1:
+          if number3x5[(hour12)*15+r*3+c] == 1:
             image[r*8+c+pixpos1] = red
 
 # hours
@@ -221,7 +234,9 @@ while True:
 
 # seconds
     if showSecond > 0:
-      if (showSecond == 2 or showSecond == 3):
+      if showSecond == 2:
+        if second > 1:
+          second = second + 1
         ringPos   = (int((second+6)/15)+int(second/3))%24
       else:
         ringPos   = (int(second/15)+int(second/3))%24
@@ -236,15 +251,14 @@ while True:
         if second%3 == 1:
           image[ring0[ringPosNext]] = green
         if ((showSecond == 1 and second%15 != 0) or
-            (showSecond == 2 and second <= 4) or
-            (showSecond == 3 and 0 < second <= 4)):
+            (showSecond == 2 and second <= 4)):
           image[ring0[ringPosPrev]] = yellowlite
         else:
           image[ring0[ringPosPrev]] = white
       ringPosPrev2 = (ringPos-2+24)%24
       if showSecond == 1 and second%15 == 0:
         image[ring0[ringPosPrev2]] = yellowlite
-      elif ((2 <= showSecond <= 3) and (second+6)%15 == 0):
+      elif showSecond == 2 and (second+6)%15 == 0:
         image[ring0[ringPosPrev2]] = white
 
 # 1/2 second
