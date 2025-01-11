@@ -1,13 +1,15 @@
 #!/usr/bin/env python
+from sense_hat import SenseHat
+import time
 
 """
   Second Hand Pi Clock (2ndHandPiClock3.py)
   asun.net 1/10/2025
 
-  Raspberry Pi sense hat 12 hour time of day clock with
+  Raspberry Pi Sense HAT 12 hour time of day clock with
   digital or analog hours, analog minutes, and analog seconds.
 
-  The time of day display on the sense hat's 8x8 RGB LED matrix is
+  The time of day display on the Sense HAT's 8x8 RGB LED matrix is
   unique for every second around the clock. Any exact hh:mm:ss time
   is visually discernable at any time.
 
@@ -15,9 +17,9 @@
 
 """
 
-#
+####
 # Clock display settings
-#
+####
 showSecond = 2  #  0 disable
   #  1 walking dot
   #  2 accumulating seconds ring resetting at 0
@@ -25,9 +27,6 @@ showHour   = 1  #  0 disable
   #  1 digital
   #  2 analog
 
-
-from sense_hat import SenseHat
-import time
 
 # Reverse Array
 def revArr(arr, start, end):
@@ -152,7 +151,7 @@ for i in range(24):
     image[ring0[i]] = yellowlite
 if showSecond == 1:
     rotLeftArr(ring0, 3) # shift 0 to image[4]
-elif showSecond == 2 or showSecond == 3:
+elif showSecond == 2:
     rotLeftArr(ring0, 2) # shift 0 to image[3]
 
 ring1 = [ # minutes, 0 at image[9]
@@ -176,6 +175,9 @@ rotLeftArr(ring2d15, 1)
 ring2d30 = [17, 10 ]         # hours digit position every 30 minutes
 
 
+####
+# Main Loop
+####
 while True:
     now = time.time()
     hour = time.localtime(now).tm_hour
@@ -263,9 +265,9 @@ while True:
 
 # 1/2 second
     if msecond >= 500:
-      image[0] = red
+      image[63] = red
     else:
-      image[0] = black
+      image[63] = black
 
 # Display the time
 #   sense.set_rotation(90) # Optional
