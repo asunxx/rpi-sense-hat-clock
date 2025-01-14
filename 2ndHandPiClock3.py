@@ -4,7 +4,7 @@ import time
 
 """
   Second Hand Pi Clock (2ndHandPiClock3.py)
-  asun.net 1/10/2025
+  asun.net 1/14/2025
 
   Raspberry Pi Sense HAT 12 hour time of day clock with
   digital or analog hours, analog minutes, and analog seconds.
@@ -23,6 +23,7 @@ import time
 showSecond = 2  #  0 disable
   #  1 walking dot
   #  2 accumulating seconds ring resetting at 0
+  #  3 walking dot starting at top left corner
 showHour   = 1  #  0 disable
   #  1 digital
   #  2 analog
@@ -201,7 +202,7 @@ while True:
     if showHour == 1:
       pixpos1 = ring2d15[int(minute/15)]
 #     pixpos1 = ring2d30[int((minute+8)/30)%2]
-      if hour12 > 9:
+      if hour12 > 9: # show the 1 for hours 10, 11, 12
         for r in range(5):
           image[pixpos1+r*8] = red
         pixpos1 = pixpos1 + 2
@@ -249,17 +250,17 @@ while True:
         image[ring0[ringPosNext]] = white
         image[ring0[ringPos]] = green
       else:
-        if showSecond == 1 or second > 2:
+        if showSecond != 2 or second > 2:
           image[ring0[ringPos]] = white
         if second%3 == 1:
           image[ring0[ringPosNext]] = green
-        if ((showSecond == 1 and second%15 != 0) or
+        if ((showSecond != 2 and second%15 != 0) or
             (showSecond == 2 and second <= 4)):
           image[ring0[ringPosPrev]] = yellowlite
         else:
           image[ring0[ringPosPrev]] = white
       ringPosPrev2 = (ringPos-2+24)%24
-      if showSecond == 1 and second%15 == 0:
+      if showSecond != 2 and second%15 == 0:
         image[ring0[ringPosPrev2]] = yellowlite
       elif showSecond == 2 and (second+6)%15 == 0:
         image[ring0[ringPosPrev2]] = white
