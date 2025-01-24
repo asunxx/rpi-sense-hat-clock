@@ -12,7 +12,7 @@ import time
   The time of day display on the Sense HAT's 8x8 RGB LED matrix is
   unique for every second around the clock. Any exact hh:mm:ss time
   is visually discernable at any time.
-  
+
 """
 
 
