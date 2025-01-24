@@ -202,13 +202,13 @@ while True:
     if showHour == 1:
       pixpos1 = ring2d15[int(minute/15)]
 #     pixpos1 = ring2d30[int((minute+8)/30)%2]
-      if hour12 > 9: # show the 1 for hours 10, 11, 12
-        for r in range(5):
+      if hour12 > 9:
+        for r in range(5):      # show the 1 for hours 10, 11, 12
           image[pixpos1+r*8] = red
         pixpos1 = pixpos1 + 2
       else:
         pixpos1 = pixpos1 + 1
-      for r in range(5):
+      for r in range(5):        # show digit font for hours
         for c in range(3):
           if number3x5[(hour12)*15+r*3+c] == 1:
             image[r*8+c+pixpos1] = red
