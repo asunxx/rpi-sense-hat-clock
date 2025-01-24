@@ -1,20 +1,19 @@
 #!/usr/bin/env python
+from sense_hat import SenseHat
+import time
 
 """
   Second Hand Pi Clock (2ndHandPiClock2.py)
   asun.net 1/4/2025
 
-  Raspberry Pi sense hat 12 hour time of day clock with
+  Raspberry Pi Sense HAT 12 hour time of day clock with
   digital or analog hours, analog minutes, and analog seconds.
 
-  The time of day display on the sense hat's 8x8 RGB LED matrix is
+  The time of day display on the Sense HAT's 8x8 RGB LED matrix is
   unique for every second around the clock. Any exact hh:mm:ss time
   is visually discernable at any time.
   
 """
-
-from sense_hat import SenseHat
-import time
 
 
 # Reverse Array
@@ -93,8 +92,7 @@ number3x5 = [
  1,0,1,
  1,1,1,
  0,0,1,
- 1,1,1
-]
+ 1,1,1 ]
 
 red   = [255,  0,  0]
 green = [  0,255,  0]
@@ -113,8 +111,7 @@ image = [
     0, 0, 0, 0, 0, 0, 0, 0,   # 32 .. 39
     0, 0, 0, 0, 0, 0, 0, 0,   # 40 .. 47
     0, 0, 0, 0, 0, 0, 0, 0,   # 48 .. 55
-    0, 0, 0, 0, 0, 0, 0, 0    # 56 .. 63
-]
+    0, 0, 0, 0, 0, 0, 0, 0 ]  # 56 .. 63
 
 ring0 = [ # seconds, 0 at image[1]
      1,  2,  3,  4,  5,  6,   # overlap  6, 15
@@ -163,13 +160,14 @@ while True:
 # hours (digital)
     if True:
       pixpos1 = ring2d15[int(minute/15)]
+#     pixpos1 = ring2d30[int((minute+8)/30)%2]
       if hour12 > 9:
-        for r in range(5):
+        for r in range(5):      # show the 1 for hours 10, 11, 12
           image[pixpos1+r*8] = red
         pixpos1 = pixpos1 + 2
       else:
         pixpos1 = pixpos1 + 1
-      for r in range(5):
+      for r in range(5):        # show digit font for hours
         for c in range(3):
           if number3x5[(hour12%10)*15+r*3+c] == 1:
             image[r*8+c+pixpos1] = red
