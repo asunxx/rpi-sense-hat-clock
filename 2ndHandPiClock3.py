@@ -4,7 +4,7 @@ import time
 
 """
   Second Hand Pi Clock (2ndHandPiClock3.py)
-  asun.net 1/14/2025
+  asun.net 1/25/2025
 
   Raspberry Pi Sense HAT 12 hour time of day clock with
   digital or analog hours, analog minutes, and analog seconds.
@@ -24,6 +24,10 @@ showSecond = 2  #  0 disable
   #  1 walking dot
   #  2 accumulating seconds ring resetting at 0
   #  3 walking dot starting at top left corner
+showMinute = 1  #  0 disable
+  #  1 walking double dot
+  #  2 accumulating minutes ring
+  #  3 walking single dot starting at top left corner
 showHour   = 1  #  0 disable
   #  1 digital
   #  2 analog
@@ -160,8 +164,15 @@ ring1 = [ # minutes, 0 at image[9]
     14, 22, 30, 38, 46,
     54, 53, 52, 51, 50,
     49, 41, 33, 25, 17 ]
-rotLeftArr(ring1, 3) # shift 0 to image[12]
+ring1hr = [0] * len(ring1)
+for i in range(len(ring1)):
+  ring1hr[i] = ring1[i]
+if showMinute == 1:
+  rotLeftArr(ring1, 3) # shift 0 to image[12]
+elif showMinute == 2:
+  rotLeftArr(ring1, 2) # shift 0 to image[11]
 
+rotLeftArr(ring1hr, 3) # shift 0 to image[12]
 ring2 = [ # hours, 0 at image[18]
     18, 19, 20, 21,
     29, 37, 45, 44,
@@ -172,7 +183,8 @@ ring3 = [
 rotLeftArr(ring3, 1)
 
 ring2d15 = [18, 17,  9, 10 ] # hours digit position every 15 minutes
-rotLeftArr(ring2d15, 1)
+if showMinute == 1 or showMinute == 2:
+  rotLeftArr(ring2d15, 1)
 ring2d30 = [17, 10 ]         # hours digit position every 30 minutes
 
 
@@ -190,10 +202,9 @@ while True:
     msecond = int(now*1000)%1000
 
 # background and border
-    if second == 0:
-      for r in range(1, 7):
-        for c in range(1, 7):
-          image[r*8+c] = black
+    for r in range(1, 7):
+      for c in range(1, 7):
+        image[r*8+c] = black
     if second == 0 and showSecond == 2:
       for c in range(24):
         image[ring0[c]] = yellowlite
@@ -219,22 +230,35 @@ while True:
       image[ring2[(hour-1+12)%12]] = red
       image[ring3[int((hour+1)/3)%4]] = red
       image[ring3[(int((hour+1)/3)-1+4)%4]] = red
-      image[ring1[int((hour%12)*20/12)]] = red
+      image[ring1hr[int((hour%12)*20/12)]] = red
       if hour%3 == 0:
-        image[ring1[(int((hour%12)*20/12)-1+20)%20]] = red
+        image[ring1hr[(int((hour%12)*20/12)-1+20)%20]] = red
       image[ring3[int((hour+5)/3)%4]] = red
       image[ring3[int((hour+6)/3)%4]] = red
 
 # minutes
-    if minute%3 == 2:
-      image[ring1[(int(minute/3)+1)%20]] = white
-      image[ring1[int(minute/3)]] = green
-    else:
-      image[ring1[int(minute/3)]] = white
-      if minute%3 == 1:
-        image[ring1[(int(minute/3)+1)%20]] = green
+    if showMinute > 0:
+      if showMinute == 2:
+        if minute > 1:
+          minute = minute + 1
+        ringPos = int(minute/3)
+        if ringPos > 1:
+          for i in range(1, ringPos):
+            if image[ring1[i]] == black:
+              image[ring1[i]] = white
+      ringPos = int(minute/3)%20
+      ringPosNext = (ringPos+1)%20
+      ringPosPrev = (ringPos-1+20)%20
+      if minute%3 == 2:
+        image[ring1[ringPosNext]] = white
+        image[ring1[ringPos]] = green
       else:
-        image[ring1[(int(minute/3)-1+20)%20]] = white
+        if showMinute != 2 or minute > 2:
+          image[ring1[ringPos]] = white
+        if minute%3 == 1:
+          image[ring1[ringPosNext]] = green
+        if (showMinute == 1 and minute%3 == 0):
+          image[ring1[ringPosPrev]] = white
 
 # seconds
     if showSecond > 0:
