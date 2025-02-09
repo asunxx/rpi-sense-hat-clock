@@ -89,7 +89,7 @@ number3x5 = [
  1,0,0,
  1,1,1,
  0,0,1,
- 1,1,1,
+ 1,1,0,
  1,1,0, #six
  1,0,0,
  1,1,1,
@@ -102,28 +102,28 @@ number3x5 = [
  0,1,0,
  1,1,1, #eight
  1,0,1,
- 1,1,1,
+ 0,1,0,
  1,0,1,
  1,1,1,
  1,1,1, #nine
  1,0,1,
  1,1,1,
  0,0,1,
- 1,1,1,
- 1,1,1, #ten
+ 1,1,0,
+ 0,1,0, #ten
  1,0,1,
  1,0,1,
  1,0,1,
- 1,1,1,
+ 0,1,0,
  0,1,0, #eleven
  0,1,0,
  0,1,0,
  0,1,0,
  0,1,0,
- 1,1,1, #twelve
+ 0,1,0, #twelve
+ 1,0,1,
  0,0,1,
- 1,1,1,
- 1,0,0,
+ 0,1,0,
  1,1,1 ]
 
 red   = [255,  0,  0]
@@ -242,7 +242,7 @@ while True:
         if minute > 1:
           minute = minute + 1
         ringPos = int(minute/3)
-        if ringPos > 1:
+        if ringPos > 1:         # fill in accumulated minutes
           for i in range(1, ringPos):
             if image[ring1[i]] == black:
               image[ring1[i]] = white
