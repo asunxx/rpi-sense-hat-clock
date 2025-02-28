@@ -211,8 +211,14 @@ while True:
 
 # hours (digital)
     if showHour == 1:
-      pixpos1 = ring2d15[int(minute/15)]
-#     pixpos1 = ring2d30[int((minute+8)/30)%2]
+      if True:
+        pixpos1 = ring2d15[int(minute/15)]
+      else:
+        pixpos1 = ring2d30[int(minute/30)]
+        if showMinute == 1:
+          pixpos1 = ring2d30[int((minute+8)/30)%2]
+        elif showMinute == 2:
+          pixpos1 = ring2d30[int((minute+6)/30)%2]
       if hour12 > 9:
         for r in range(5):      # show the 1 for hours 10, 11, 12
           image[pixpos1+r*8] = red
