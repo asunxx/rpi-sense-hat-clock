@@ -13,18 +13,18 @@ import time
   unique for every second around the clock. Any exact hh:mm:ss time
   is visually discernable at any time.
 
-  v3 - Displays accumulating seconds ring
+  v3 - Displays accumulating minutes and/or seconds ring
 
 """
 
 ####
 # Clock display settings
 ####
-showSecond = 2  #  0 disable
+showSecond = 1  #  0 disable
   #  1 walking dot
   #  2 accumulating seconds ring resetting at 0
   #  3 walking dot starting at top left corner
-showMinute = 1  #  0 disable
+showMinute = 2  #  0 disable
   #  1 walking double dot
   #  2 accumulating minutes ring
   #  3 walking single dot starting at top left corner
@@ -200,6 +200,8 @@ while True:
     minute = time.localtime(now).tm_min
     second = time.localtime(now).tm_sec
     msecond = int(now*1000)%1000
+    if msecond < 500 and False:
+      print("%02d:%02d:%02d.%03d" % (hour, minute, second, msecond))
 
 # background and border
     for r in range(1, 7):
@@ -211,8 +213,14 @@ while True:
 
 # hours (digital)
     if showHour == 1:
-      pixpos1 = ring2d15[int(minute/15)]
-#     pixpos1 = ring2d30[int((minute+8)/30)%2]
+      if True:
+        pixpos1 = ring2d15[int(minute/15)]
+      else:
+        pixpos1 = ring2d30[int(minute/30)]      # :00 :30
+        if showMinute == 1:
+          pixpos1 = ring2d30[int((minute+8)/30)%2]      # :22 :52
+        elif showMinute == 2:
+          pixpos1 = ring2d30[int((minute+6)/30)%2]      # :24 :54
       if hour12 > 9:
         for r in range(5):      # show the 1 for hours 10, 11, 12
           image[pixpos1+r*8] = red
