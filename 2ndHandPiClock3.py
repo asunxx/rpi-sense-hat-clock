@@ -200,8 +200,8 @@ while True:
     minute = time.localtime(now).tm_min
     second = time.localtime(now).tm_sec
     msecond = int(now*1000)%1000
-#   if msecond < 500:
-#     print "%02d:%02d:%02d.%03d" % (hour, minute, second, msecond)
+    if msecond < 500 and False:
+      print("%02d:%02d:%02d.%03d" % (hour, minute, second, msecond))
 
 # background and border
     for r in range(1, 7):
