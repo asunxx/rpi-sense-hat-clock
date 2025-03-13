@@ -30,10 +30,10 @@ number3x4 = [
   0,0,1,
   1,1,0,
   1,1,1,
-  1,1,1, #three
+  1,1,0, #three
   0,1,1,
   0,0,1,
-  1,1,1,
+  1,1,0,
   1,0,0, #four
   1,0,1,
   1,1,1,
@@ -50,8 +50,8 @@ number3x4 = [
   0,0,1,
   0,1,0,
   1,0,0,
-  0,1,1, #eight
-  1,1,1,
+  1,1,1, #eight
+  0,1,0,
   1,0,1,
   1,1,1,
   1,1,1, #nine
@@ -114,7 +114,8 @@ while True:
       d1 = int(hour/10)
       d2 = hour%10
 
-      draw_digit(d1, 0, red)
+      if d1 != 0:
+        draw_digit(d1, 0, red)
       draw_digit(d2, 4, red)
 
 # minutes
@@ -136,8 +137,8 @@ while True:
         image[7] = black
 
 # Display the time
-#   sense.set_rotation(90) # Optional
-#   sense.low_light = True # Optional
+#   sense.set_rotation(90)      # Optional
+#   sense.low_light = True      # Optional
     sense.set_pixels(image)
 
     time.sleep((500.0-msecond%500)/1000.0)
