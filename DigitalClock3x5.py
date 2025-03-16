@@ -136,11 +136,14 @@ while True:
       d2 = minute%10
       d1off = 0
       # shift to left the first digit in minute if hours are single-digit
-      if (hour < 10):
+      if (hour < 10 and hour != 1):
         d1off = 1
       # shift to left if first digit in minute is 1
-      if (d1 == 1 and hour < 20):
-        d1off = 2
+      if (d1 == 1):
+        if (10 <= hour < 20):
+          d1off = 2
+        else:
+          d1off = 0
 
       d1pos = 25
       d2pos = 29
@@ -169,6 +172,10 @@ while True:
         if (minUnit == 1):
           d2off = 2
 
+        if (minDecs == 1):
+          d2off = 5
+        if d2 == 1:
+          d2off = 7
         if (d2off == 3 and d2 != 1 and d2 != 4):
           # find offset with fewest pixel overlaps
           ovlapMin = 3*5
@@ -236,8 +243,8 @@ while True:
         image[7] = black
 
 # Display the time
-#   sense.set_rotation(90) # Optional
-#   sense.low_light = True # Optional
+#   sense.set_rotation(90)      # Optional
+#   sense.low_light = True      # Optional
     sense.set_pixels(image)
 
     time.sleep((500.0-msecond%500)/1000.0)
