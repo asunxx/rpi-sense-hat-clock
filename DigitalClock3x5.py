@@ -99,14 +99,22 @@ image = [
 def draw_digit(digit, position, color, color2 = black):
     for r in range(5):
       for c in range(3):
-        pix = number3x5[digit*15+r*3+c]
-        if pix == 1:
+        if number3x5[digit*15+r*3+c] == 1:
           pixpos = r*8+c+position
           if image[pixpos] == black:
             image[pixpos] = color
           else:
             if color2 != black:
               image[pixpos] = color2
+
+def ovl_digit(digit, position): # count overlap pixels for digit
+    n = 0
+    for r in range(3, 5):       # assume rows 0, 1, 2 never overlap
+      for c in range(3):
+        if (number3x5[digit*15+r*3+c] == 1 and
+          image[r*8+c+position] != black):
+          n = n + 1
+    return n
 
 ####
 # Main Loop
@@ -174,19 +182,13 @@ while True:
 
         if (minDecs == 1):
           d2off = 5
-        if d2 == 1:
+        if (d2 == 1):
           d2off = 7
         if (d2off == 3 and d2 != 1 and d2 != 4):
           # find offset with fewest pixel overlaps
-          ovlapMin = 3*5
+          ovlapMin = 3*5+1
           for t2off in (3, 2):
-            ovlap = 0
-            for r in range(3, 5):
-              for c in range(3):
-                pix = number3x5[d2*15+r*3+c]
-                if pix == 1:
-                  if image[r*8+c+d2pos-t2off] != black:
-                    ovlap = ovlap + 1
+            ovlap = ovl_digit(d2, d2pos-t2off)
             if ovlap < ovlapMin:
               ovlapMin = ovlap
               d2off = t2off
@@ -201,15 +203,9 @@ while True:
 
         if (d2off == 1 and d2 != 7):
           # find offset with fewest pixel overlaps
-          ovlapMin = 3*5
+          ovlapMin = 3*5+1
           for t2off in (2, 3, 1):
-            ovlap = 0
-            for r in range(3, 5):
-              for c in range(3):
-                pix = number3x5[d2*15+r*3+c]
-                if pix == 1:
-                  if image[r*8+c+d2pos-t2off] != black:
-                    ovlap = ovlap + 1
+            ovlap = ovl_digit(d2, d2pos-t2off)
             if ovlap < ovlapMin:
               ovlapMin = ovlap
               d2off = t2off
