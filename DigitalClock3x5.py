@@ -144,7 +144,8 @@ while True:
       d2 = minute%10
       d1off = 0
       # shift to left the first digit in minute if hours are single-digit
-      if (hour < 10 and hour != 1):
+#     if (hour < 10):
+      if (hour < 10 and hour != 1 and hour != 7):
         d1off = 1
       # shift to left if first digit in minute is 1
       if (d1 == 1):
@@ -175,12 +176,11 @@ while True:
         d1off = 8       # out of display
         d2off = 3
 #       if (d2 == 0 or d2 == 2 or d2 == 3 or d2 == 7):
-        if (d2 == 7):
-          d2off = 2
+#         d2off = 2
         if (minUnit == 1):
           d2off = 2
 
-        if (minDecs == 1):
+        if (minDecs == 1 or d2 == 7):
           d2off = 5
         if (d2 == 1):
           d2off = 7
