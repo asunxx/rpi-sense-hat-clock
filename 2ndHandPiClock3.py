@@ -131,32 +131,37 @@ green = [  0,255,  0]
 blue  = [  0,  0,255]
 black = [  0,  0,  0]
 white = [255,255,255]
-yellow     = [255,255,  0]
+magenta = [255,  0,255]
+cyan    = [  0,255,255]
+yellow  = [255,255,  0]
 yellowlite = [128,128,  0]
 greenlite  = [  0,128,  0]
 
 image = [
-    0, 0, 0, 0, 0, 0, 0, 0,   #  0 ..  7
-    0, 0, 0, 0, 0, 0, 0, 0,   #  8 .. 15
-    0, 0, 0, 0, 0, 0, 0, 0,   # 16 .. 23
-    0, 0, 0, 0, 0, 0, 0, 0,   # 24 .. 31
-    0, 0, 0, 0, 0, 0, 0, 0,   # 32 .. 39
-    0, 0, 0, 0, 0, 0, 0, 0,   # 40 .. 47
-    0, 0, 0, 0, 0, 0, 0, 0,   # 48 .. 55
-    0, 0, 0, 0, 0, 0, 0, 0 ]  # 56 .. 63
+    0, 0, 0, 0, 0, 0, 0, 0,     #  0 ..  7
+    0, 0, 0, 0, 0, 0, 0, 0,     #  8 .. 15
+    0, 0, 0, 0, 0, 0, 0, 0,     # 16 .. 23
+    0, 0, 0, 0, 0, 0, 0, 0,     # 24 .. 31
+    0, 0, 0, 0, 0, 0, 0, 0,     # 32 .. 39
+    0, 0, 0, 0, 0, 0, 0, 0,     # 40 .. 47
+    0, 0, 0, 0, 0, 0, 0, 0,     # 48 .. 55
+    0, 0, 0, 0, 0, 0, 0, 0 ]    # 56 .. 63
 for i in range(len(image)):
     image[i] = black
 
+r0mode = showSecond
+r1mode = showMinute
+
 ring0 = [ # seconds, 0 at image[1]
-     1,  2,  3,  4,  5,  6,   # overlap  6, 15
-    15, 23, 31, 39, 47, 55,   # overlap 55, 62
-    62, 61, 60, 59, 58, 57,   # overlap 57, 48
-    48, 40, 32, 24, 16,  8 ]  # overlap  8,  1
+     1,  2,  3,  4,  5,  6,     # double pixel  6, 15
+    15, 23, 31, 39, 47, 55,     # double pixel 55, 62
+    62, 61, 60, 59, 58, 57,     # double pixel 57, 48
+    48, 40, 32, 24, 16,  8 ]    # double pixel  8,  1
 for i in range(24):
     image[ring0[i]] = yellowlite
-if showSecond == 1:
+if r0mode == 1:
     rotLeftArr(ring0, 3) # shift 0 to image[4]
-elif showSecond == 2:
+elif r0mode == 2:
     rotLeftArr(ring0, 2) # shift 0 to image[3]
 
 ring1 = [ # minutes, 0 at image[9]
@@ -164,15 +169,13 @@ ring1 = [ # minutes, 0 at image[9]
     14, 22, 30, 38, 46,
     54, 53, 52, 51, 50,
     49, 41, 33, 25, 17 ]
-ring1hr = [0] * len(ring1)
-for i in range(len(ring1)):
-  ring1hr[i] = ring1[i]
-if showMinute == 1:
+ring1hr = ring1[:] # duplicate for hours, 0 at image[9]
+if r1mode == 1:
   rotLeftArr(ring1, 3) # shift 0 to image[12]
-elif showMinute == 2:
+elif r1mode == 2:
   rotLeftArr(ring1, 2) # shift 0 to image[11]
 
-rotLeftArr(ring1hr, 3) # shift 0 to image[12]
+rotLeftArr(ring1hr, 3) # shift hour 0 to image[12]
 ring2 = [ # hours, 0 at image[18]
     18, 19, 20, 21,
     29, 37, 45, 44,
@@ -182,10 +185,10 @@ ring3 = [
     27, 28, 36, 35 ]
 rotLeftArr(ring3, 1)
 
-ring2d15 = [18, 17,  9, 10 ] # hours digit position every 15 minutes
-if showMinute == 1 or showMinute == 2:
+ring2d15 = [18, 17,  9, 10 ]    # hours digit position every 15 minutes
+if r1mode == 1 or r1mode == 2:
   rotLeftArr(ring2d15, 1)
-ring2d30 = [17, 10 ]         # hours digit position every 30 minutes
+ring2d30 = [17, 10 ]            # hours digit position every 30 minutes
 
 
 ####
@@ -193,34 +196,41 @@ ring2d30 = [17, 10 ]         # hours digit position every 30 minutes
 ####
 while True:
     now = time.time()
-    hour = time.localtime(now).tm_hour
-    hour12 = hour%12
+    hour24 = time.localtime(now).tm_hour
+    hour12 = hour24%12
     if hour12 == 0:
       hour12 = 12
+    hour = hour24 if False else hour12
     minute = time.localtime(now).tm_min
     second = time.localtime(now).tm_sec
     msecond = int(now*1000)%1000
     if msecond < 500 and False:
       print("%02d:%02d:%02d.%03d" % (hour, minute, second, msecond))
 
+    r0data = second
+    r1data = minute
+
 # background and border
     for r in range(1, 7):
       for c in range(1, 7):
         image[r*8+c] = black
-    if second == 0 and showSecond == 2:
+    if r0data == 0 and r0mode == 2:
       for c in range(24):
         image[ring0[c]] = yellowlite
 
 # hours (digital)
     if showHour == 1:
-      if True:
-        pixpos1 = ring2d15[int(minute/15)]
-      else:
-        pixpos1 = ring2d30[int(minute/30)]      # :00 :30
-        if showMinute == 1:
-          pixpos1 = ring2d30[int((minute+8)/30)%2]      # :22 :52
-        elif showMinute == 2:
-          pixpos1 = ring2d30[int((minute+6)/30)%2]      # :24 :54
+      if r1mode == 0:   # fixed digit position
+        pixpos1 = ring2d30[0]
+      elif True:        # digit position per 15 ring1 units
+        pixpos1 = ring2d15[int(r1data/15)]
+      else:             # digit position per 30 ring1 units
+        if r1mode == 1:
+          pixpos1 = ring2d30[int((r1data+8)/30)%2]      # :22 :52
+        elif r1mode == 2:
+          pixpos1 = ring2d30[int((r1data+6)/30)%2]      # :24 :54
+        else:
+          pixpos1 = ring2d30[int(r1data/30)]      # :00 :30
       if hour12 > 9:
         for r in range(5):      # show the 1 for hours 10, 11, 12
           image[pixpos1+r*8] = red
@@ -245,57 +255,61 @@ while True:
       image[ring3[int((hour+6)/3)%4]] = red
 
 # minutes
-    if showMinute > 0:
-      if showMinute == 2:
-        if minute > 1:
-          minute = minute + 1
-        ringPos = int(minute/3)
-        if ringPos > 1:         # fill in accumulated minutes
+    if r1mode > 0:
+      if r1mode == 2:
+        if r1data > 1:          # show 2 as 3, ..., 59 as 60
+          r1data = r1data + 1
+        ringPos = int(r1data/3)
+        if ringPos > 1:         # fill in accumulation
           for i in range(1, ringPos):
             if image[ring1[i]] == black:
               image[ring1[i]] = white
-      ringPos = int(minute/3)%20
+      ringPos = int(r1data/3)%20
       ringPosNext = (ringPos+1)%20
       ringPosPrev = (ringPos-1+20)%20
-      if minute%3 == 2:
+      if r1data%3 == 2:
         image[ring1[ringPosNext]] = white
         image[ring1[ringPos]] = green
       else:
-        if showMinute != 2 or minute > 2:
+        if r1mode != 2 or r1data > 2:
           image[ring1[ringPos]] = white
-        if minute%3 == 1:
+        if r1data%3 == 1:
           image[ring1[ringPosNext]] = green
-        if (showMinute == 1 and minute%3 == 0):
+        if (r1mode == 1 and r1data%3 == 0):     # double pixel white
           image[ring1[ringPosPrev]] = white
 
 # seconds
-    if showSecond > 0:
-      if showSecond == 2:
-        if second > 1:
-          second = second + 1
-        ringPos   = (int((second+6)/15)+int(second/3))%24
+    if r0mode > 0:
+      if r0mode == 2:
+        if r0data > 1:          # show 2 as 3, ..., 59 as 60
+          r0data = r0data + 1
+        ringPos   = int((r0data+6)/15)+int(r0data/3)
+        if ringPos > 1 and False:       # fill in accumulation
+          for i in range(1, ringPos):   # disabled for self accumulating ring0
+            image[ring0[i]] = white
+        ringPos   = ringPos%24
       else:
-        ringPos   = (int(second/15)+int(second/3))%24
+        ringPos   = (int(r0data/15)+int(r0data/3))%24
       ringPosNext = (ringPos+1)%24
       ringPosPrev = (ringPos-1+24)%24
-      if second%3 == 2:
+      if r0data%3 == 2:
         image[ring0[ringPosNext]] = white
         image[ring0[ringPos]] = green
       else:
-        if showSecond != 2 or second > 2:
+        if r0mode != 2 or r0data > 2:
           image[ring0[ringPos]] = white
-        if second%3 == 1:
+        if r0data%3 == 1:
           image[ring0[ringPosNext]] = green
-        if ((showSecond != 2 and second%15 != 0) or
-            (showSecond == 2 and second <= 4)):
-          image[ring0[ringPosPrev]] = yellowlite
-        else:
+        if ((r0mode != 2 and r0data%15 == 0) or # double pixel white or
+            (r0mode == 2 and r0data > 4)):      # accumulation tail white
           image[ring0[ringPosPrev]] = white
+        else:
+          image[ring0[ringPosPrev]] = yellowlite
       ringPosPrev2 = (ringPos-2+24)%24
-      if showSecond != 2 and second%15 == 0:
-        image[ring0[ringPosPrev2]] = yellowlite
-      elif showSecond == 2 and (second+6)%15 == 0:
-        image[ring0[ringPosPrev2]] = white
+      if r0mode != 2 and r0data%15 == 0:        # double pixel position?
+        image[ring0[ringPosPrev2]] = yellowlite # green -> background
+      elif r0mode == 2 and (r0data+6)%15 == 0:
+        image[ring0[ringPosPrev2]] = white      # green -> accumulation tail
 
 # 1/2 second
     if msecond >= 500:
@@ -304,8 +318,8 @@ while True:
       image[63] = black
 
 # Display the time
-#   sense.set_rotation(90) # Optional
-#   sense.low_light = True # Optional
+#   sense.set_rotation(90)      # Optional
+#   sense.low_light = True      # Optional
     sense.set_pixels(image)
 
     time.sleep((500.0-msecond%500)/1000.0)
