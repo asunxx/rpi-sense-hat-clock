@@ -34,6 +34,7 @@ showHour   = 1  #  0 disable
   #  1 digital :15 digit placement shift
   #  2 digital :30 digit placement shift
   #  3 analog
+  # 1x 24 hour clock
 
 
 # Reverse Array
@@ -113,21 +114,26 @@ number3x5 = [
  1,1,1,
  0,0,1,
  1,1,0,
- 0,1,0, #ten
- 1,0,1,
- 1,0,1,
- 1,0,1,
- 0,1,0,
- 0,1,0, #eleven
- 0,1,0,
- 0,1,0,
+ 0,0,0, #
+ 0,0,0,
+ 0,0,0,
+ 0,0,0,
+ 0,0,0,
+ 0,1,0, #10s and 20s "1"
  0,1,0,
  0,1,0,
- 0,1,0, #twelve
- 1,0,1,
- 0,0,1,
  0,1,0,
- 1,1,1 ]
+ 0,1,0,
+ 1,0,0, #20s "2"
+ 0,1,0,
+ 0,1,0,
+ 1,0,0,
+ 1,1,0,
+ 1,1,0, #20s "3"
+ 0,1,0,
+ 1,0,0,
+ 0,1,0,
+ 1,0,0 ]
 
 red   = [255,  0,  0]
 green = [  0,255,  0]
@@ -179,6 +185,8 @@ if r1mode == 1:
 elif r1mode == 2:
   rotLeftArr(ring1, 2) # shift 0 to image[11]
 
+r2mode = showHour%10
+r2mode1x = int(showHour/10)%10
 rotLeftArr(ring1hr, 3) # shift hour 0 to image[12]
 ring2 = [ # hours, 0 at image[18]
     18, 19, 20, 21,
@@ -194,6 +202,12 @@ if r1mode == 1 or r1mode == 2:
   rotLeftArr(ring2d15, 1)
 ring2d30 = [17, 10 ]            # hours digit position every 30 minutes
 
+def draw_digit(digit, position, color):
+    for r in range(5):
+      for c in range(3):
+        if number3x5[digit*15+r*3+c] == 1:
+           image[r*8+c+position] = color
+
 
 ####
 # Main Loop
@@ -204,7 +218,7 @@ while True:
     hour12 = hour24%12
     if hour12 == 0:
       hour12 = 12
-    hour = hour24 if False else hour12
+    hour = hour12 if r2mode1x == 0 else hour24
     minute = time.localtime(now).tm_min
     second = time.localtime(now).tm_sec
     msecond = int(now*1000)%1000
@@ -223,31 +237,49 @@ while True:
         image[ring0[i]] = yellowlite
 
 # hours (digital)
-    if showHour == 1 or showHour == 2:
+    if r2mode == 1 or r2mode == 2:
       if r1mode == 0:           # fixed digit position
-        pixpos1 = ring2d30[0]
-      elif showHour == 1:       # digit position per 15 ring1 units
-        pixpos1 = ring2d15[int(r1data/15)]
+        dpos = ring2d30[0]
+      elif r2mode == 1:         # digit position per 15 ring1 units
+        dpos = ring2d15[int(r1data/15)]
       else:             	# digit position per 30 ring1 units
         if r1mode == 1:
-          pixpos1 = ring2d30[int((r1data+8)/30)%2]      # :22 :52
+          dpos = ring2d30[int((r1data+8)/30)%2]         # :22 :52
         elif r1mode == 2:
-          pixpos1 = ring2d30[int((r1data+6)/30)%2]      # :24 :54
+          dpos = ring2d30[int((r1data+6)/30)%2]         # :24 :54
         else:
-          pixpos1 = ring2d30[int(r1data/30)]      # :00 :30
-      if hour12 > 9:
-        for r in range(5):      # show the 1 for hours 10, 11, 12
-          image[pixpos1+r*8] = red
-        pixpos1 = pixpos1 + 2
+          dpos = ring2d30[int(r1data/30)]       # :00 :30
+
+      d1 = int(hour/10)
+      if d1 == 0:
+        dpos = dpos + 1
+      elif d1 == 1:
+        draw_digit(d1+10, dpos-1, red)  # narrow "1"
+        dpos = dpos + 2
+      elif d1 == 2 or d1 == 3:
+        if hour == 21 or hour == 31:
+          draw_digit(d1, dpos, red)     # normal "2" or "3"
+        elif hour == 20 or hour == 30:
+          dpos = int(dpos/8)*8+1
+          draw_digit(d1+10, dpos, red)
+          dpos = dpos + 1
+        else:
+          draw_digit(d1+10, dpos, red)  # narrow "2" or "3"
+        dpos = dpos + 2
       else:
-        pixpos1 = pixpos1 + 1
-      for r in range(5):        # show digit font for hours
-        for c in range(3):
-          if number3x5[(hour12)*15+r*3+c] == 1:
-            image[r*8+c+pixpos1] = red
+        draw_digit(d1, dpos, red)
+        dpos = dpos + 2
+
+      d2 = hour%10
+      if hour == 11:
+        draw_digit(d2+10, dpos, red)
+      elif (hour > 19 and 1 <= d2 <= 3):
+        draw_digit(d2+10, dpos+1, red)
+      else:
+        draw_digit(d2, dpos, red)
 
 # hours
-    elif showHour == 3:
+    elif r2mode == 3:
       image[ring2[hour%12]] = red
       image[ring2[(hour-1+12)%12]] = red
       image[ring3[int((hour+1)/3)%4]] = red
