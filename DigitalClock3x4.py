@@ -67,8 +67,6 @@ white = [255,255,255]
 magenta = [255,  0,255]
 cyan    = [  0,255,255]
 yellow  = [255,255,  0]
-yellowlite = [128,128,  0]
-greenlite  = [  0,128,  0]
 
 image = [
     0, 0, 0, 0, 0, 0, 0, 0,   #  0 ..  7
@@ -83,8 +81,7 @@ image = [
 def draw_digit(digit, position, color):
     for r in range(4):
       for c in range(3):
-        pix = number3x4[digit*12+r*3+c]
-        if pix == 1:
+        if number3x4[digit*12+r*3+c] == 1:
           image[r*8+c+position] = color
 
 ####
@@ -106,7 +103,7 @@ while True:
       print("%02d:%02d:%02d.%03d" % (hour, minute, second, msecond))
 
 # background and border
-    for i in range(64):
+    for i in range(len(image)):
       image[i] = black
 
 # hours
