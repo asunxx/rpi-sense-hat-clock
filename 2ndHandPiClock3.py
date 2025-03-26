@@ -60,7 +60,6 @@ def rotRightArr(arr, k):
     revArr(arr, 0, k - 1)
     revArr(arr, k, n - 1)
 
-
 sense = SenseHat()
 
 number3x5 = [
@@ -114,26 +113,26 @@ number3x5 = [
  1,1,1,
  0,0,1,
  1,1,0,
- 0,0,0, #
+ 0,0,0, #20s "0"
+ 0,1,1,
+ 0,1,1,
+ 0,1,1,
  0,0,0,
- 0,0,0,
- 0,0,0,
- 0,0,0,
- 0,1,0, #10s and 20s "1"
+ 0,0,1, #10s and 20s "1"
+ 0,0,1,
+ 0,0,1,
+ 0,0,1,
+ 0,0,1,
+ 0,1,0, #20s "2"
+ 0,0,1,
+ 0,0,1,
  0,1,0,
+ 0,1,1,
+ 0,1,1, #20s "3"
+ 0,0,1,
  0,1,0,
- 0,1,0,
- 0,1,0,
- 1,0,0, #20s "2"
- 0,1,0,
- 0,1,0,
- 1,0,0,
- 1,1,0,
- 1,1,0, #20s "3"
- 0,1,0,
- 1,0,0,
- 0,1,0,
- 1,0,0 ]
+ 0,0,1,
+ 0,1,0 ]
 
 red   = [255,  0,  0]
 green = [  0,255,  0]
@@ -202,12 +201,16 @@ if r1mode == 1 or r1mode == 2:
   rotLeftArr(ring2d15, 1)
 ring2d30 = [17, 10 ]            # hours digit position every 30 minutes
 
-def draw_digit(digit, position, color):
+def draw_digit(digit, position, color, color2 = black):
     for r in range(5):
       for c in range(3):
         if number3x5[digit*15+r*3+c] == 1:
-           image[r*8+c+position] = color
-
+          pixpos = r*8+c+position
+          if image[pixpos] == black:
+            image[pixpos] = color
+          else:
+            if color2 != black:
+              image[pixpos] = color2
 
 ####
 # Main Loop
@@ -249,32 +252,29 @@ while True:
           dpos = ring2d30[int((r1data+6)/30)%2]         # :24 :54
         else:
           dpos = ring2d30[int(r1data/30)]       # :00 :30
-
       d1 = int(hour/10)
+      d2 = hour%10
+
       if d1 == 0:
         dpos = dpos + 1
       elif d1 == 1:
-        draw_digit(d1+10, dpos-1, red)  # narrow "1"
+        draw_digit(d1+10, dpos-2, red)  # narrow "1"
         dpos = dpos + 2
-      elif d1 == 2 or d1 == 3:
-        if hour == 21 or hour == 31:
-          draw_digit(d1, dpos, red)     # normal "2" or "3"
-        elif hour == 20 or hour == 30:
-          dpos = int(dpos/8)*8+1
-          draw_digit(d1+10, dpos, red)
-          dpos = dpos + 1
-        else:
-          draw_digit(d1+10, dpos, red)  # narrow "2" or "3"
+      elif (d2 != 1 and (d1 == 2 or d1 == 3)):
+        draw_digit(d1+10, dpos-1, red)  # narrow "2" or "3"
         dpos = dpos + 2
+        if (r1mode == 0 and (d2 < 1 or d2 > 3)):
+          dpos = dpos + 1       # pass space for next normal digit 
       else:
-        draw_digit(d1, dpos, red)
+        draw_digit(d1, dpos, red)       # normal "2" to "9"
         dpos = dpos + 2
+        if (r1mode == 0 and d2 != 1):
+          dpos = dpos + 1       # pass overlap for next digit
 
-      d2 = hour%10
       if hour == 11:
-        draw_digit(d2+10, dpos, red)
+        draw_digit(d2+10, dpos-1, red)
       elif (hour > 19 and 1 <= d2 <= 3):
-        draw_digit(d2+10, dpos+1, red)
+        draw_digit(d2+10, dpos, red)
       else:
         draw_digit(d2, dpos, red)
 
