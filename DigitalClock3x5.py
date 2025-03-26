@@ -83,8 +83,6 @@ white = [255,255,255]
 magenta = [255,  0,255]
 cyan    = [  0,255,255]
 yellow  = [255,255,  0]
-yellowlite = [128,128,  0]
-greenlite  = [  0,128,  0]
 
 image = [
     0, 0, 0, 0, 0, 0, 0, 0,   #  0 ..  7
@@ -112,7 +110,7 @@ def ovl_digit(digit, position): # count overlap pixels for digit
     for r in range(3, 5):       # assume rows 0, 1, 2 never overlap
       for c in range(3):
         if (number3x5[digit*15+r*3+c] == 1 and
-          image[r*8+c+position] != black):
+            image[r*8+c+position] != black):
           n = n + 1
     return n
 
@@ -135,7 +133,7 @@ while True:
       print("%02d:%02d:%02d.%03d" % (hour, minute, second, msecond))
 
 # background and border
-    for i in range(64):
+    for i in range(len(image)):
       image[i] = black
 
 # minutes
