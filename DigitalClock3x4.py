@@ -99,7 +99,7 @@ while True:
     msecond = int(now*1000)%1000
 #   hour = (minute+0)%24+0      # debug
 #   minute = second             # debug
-    if False:
+    if msecond < 500 and False:
       print("%02d:%02d:%02d.%03d" % (hour, minute, second, msecond))
 
 # background and border
