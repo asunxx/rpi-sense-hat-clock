@@ -114,22 +114,22 @@ number3x5 = [
  0,0,1,
  1,1,0,
  0,0,0, #20s "0"
- 0,1,1,
+ 0,1,1, #2x5 font
  0,1,1,
  0,1,1,
  0,0,0,
  0,0,1, #10s and 20s "1"
- 0,0,1,
+ 0,0,1, #2x5 font
  0,0,1,
  0,0,1,
  0,0,1,
  0,1,0, #20s "2"
- 0,0,1,
+ 0,0,1, #2x5 font
  0,0,1,
  0,1,0,
  0,1,1,
  0,1,1, #20s "3"
- 0,0,1,
+ 0,0,1, #2x5 font
  0,1,0,
  0,0,1,
  0,1,0 ]
@@ -261,13 +261,16 @@ while True:
         draw_digit(d1+10, dpos-2, red)  # narrow "1"
         dpos = dpos + 2
       elif (d2 != 1 and (d1 == 2 or d1 == 3)):
-        draw_digit(d1+10, dpos-1, red)  # narrow "2" or "3"
-        dpos = dpos + 2
+        if (r1mode == 0 or (2 <= d2 <= 3)):
+          draw_digit(d1+10, dpos-1, red)        # narrow "2" or "3"
+        else:
+          draw_digit(d1+10, dpos-1, magenta)    # narrow "2" or "3"
+        dpos = dpos + 2         # at space for next normal digit
         if (r1mode == 0 and (d2 < 1 or d2 > 3)):
-          dpos = dpos + 1       # pass space for next normal digit 
+          dpos = dpos + 1       # pass space for next normal digit
       else:
         draw_digit(d1, dpos, red)       # normal "2" to "9"
-        dpos = dpos + 2
+        dpos = dpos + 2         # at overlap for next digit
         if (r1mode == 0 and d2 != 1):
           dpos = dpos + 1       # pass overlap for next digit
 
