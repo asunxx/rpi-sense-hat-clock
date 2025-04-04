@@ -120,11 +120,21 @@ while True:
       d1 = int(minute/10)
       d2 = minute%10
 
-      draw_digit(d1, 33, cyan)
-      draw_digit(d2, 37, cyan)
+      draw_digit(d1, 32, cyan)
+      draw_digit(d2, 36, cyan)
 
 # seconds
-    pass
+    if True:
+      dpos = 63
+      d1 = second
+      for i in range(6):
+        d2 = d1%2
+        d1 = int(d1/2)
+        if d2 == 1:
+          image[dpos] = yellow
+        else:
+          image[dpos] = black
+        dpos = dpos - 8
 
 # 1/2 second
     if True:
