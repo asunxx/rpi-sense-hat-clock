@@ -10,17 +10,17 @@ to show the time.
 The project's primary design goal is to create
 a clock display on a 8x8 color dot matrix with time that is readable
 at a glance (one photo frame) without scrolling or flashing text.
-Digital clock digits tend to require 3x5 dot matrix fonts to be readable,
+Digital clock digits tend to require 3x5 dot matrix fonts to be readable
 and few would fit on a 8x8 display.
-Thus, this display size is a major constraint, and presents
-difficult clock design challenges.
+Thus, display size is a major constraint and presents challenges
+to each of the clock designs.
 
 There are three clock designs in this project:
 [2ndHandPiClock3.py](../../raw/refs/heads/main/2ndHandPiClock3.py),
 [DigitalClock3x4.py](../../raw/refs/heads/main/DigitalClock3x4.py), and
 [DigitalClock3x5.py](../../raw/refs/heads/main/DigitalClock3x5.py).
 Second Hand Pi Clock is an analog/digital clock with
-minute and second "hands", and is this project's original creation.
+minute and second "hands" and is this project's original creation.
 The two all digital clocks are based on other similar projects
 for Raspberry Pi or Arduino. 
 
@@ -46,22 +46,15 @@ s/#/ /
 s/90/180/
 .
     sense.set_rotation(180)      # Optional
-.+1
-#   sense.low_light = True      # Optional
-s/#/ /
-.
-    sense.low_light = True      # Optional
 wq
 9805
-$ ls -l 2ndHandPiClock3.py
--rw-r--r-- 1 pi pi 9805 Apr 10 15:02 2ndHandPiClock3.py
 $
 $ # set executable
 $ chmod +x 2ndHandPiClock3.py
 $ ls -l 2ndHandPiClock3.py
 -rwxr-xr-x 1 pi pi 9805 Apr 10 15:02 2ndHandPiClock3.py
 $
-$ # execute in background with no hang up
+$ # start the clock in background with no hang up
 $ nohup ./2ndHandPiClock3.py &
 $ nohup: ignoring input and appending output to 'nohup.out'
 
@@ -75,7 +68,7 @@ $
 
 The clock code will also run as is on the
 Raspberry Pi Sense Hat emulator at
-[https://trinket.io/sense-hat](https://trinket.io/sense-hat)
+[https://trinket.io/sense-hat](https://trinket.io/sense-hat).
 
 
 ## Second Hand Pi Clock ([2ndHandPiClock3.py](2ndHandPiClock3.py))
@@ -93,6 +86,32 @@ Analog hours time display:\
 ![Screenshot of time display 10:10:40](assets/images/Clock3.time.10.10.40.png)
 10:10:40
 
+Second Hand Pi Clock supports multiple and separate settings for
+showing seconds, minutes, and hours.
+The code variables within 2ndHandPiClock3.py are
+`showSecond`, `showMinute`, and `showHour` respectively.
+These variables have values hard coded and can only be changed by editing the code.
+The comments describe the choices available for each setting.
+```python
+####
+# Clock display settings
+####
+showSecond = 1  #  0 disable
+  #  1 walking dot
+  #  2 accumulating seconds ring resetting at 0
+  #  3 walking dot starting at top left corner
+  # 1x show minutes in place of seconds
+showMinute = 2  #  0 disable
+  #  1 walking double dot
+  #  2 accumulating minutes ring
+  #  3 walking single dot starting at top left corner
+  # 1x show seconds in place of minutes
+showHour   = 1  #  0 disable
+  #  1 digital :15 digit placement shift
+  #  2 digital :30 digit placement shift
+  #  3 analog
+  # 1x 24 hour clock
+```
 
 ## Digital Clock 3x4 ([DigitalClock3x4.py](DigitalClock3x4.py))
 
