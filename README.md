@@ -24,7 +24,7 @@ minute and second "hands" and is this project's original creation.
 The two all digital clocks are based on other similar projects
 for Raspberry Pi or Arduino. 
 
-Each clock consists of a single standalone file written in python3.
+Each clock consists of a single standalone file with code written in python3.
 The clock code runs as is on the Raspberry Pi with Sense Hat hardware
 and Raspberry Pi OS or Raspbian operating system software.
 ```
@@ -137,6 +137,6 @@ And overlapping pixels use an alternate color pattern
 (alternating red/green or yellow) to distinguish the overlapping digits.
 There's no seconds display with this clock design.
 
-![Screenshot of time display 12:34](assets/images/Clock3x5.time.12.34.png)
+![Screenshot of time display 12:34](assets/images/Clock3x5.time.12.34.gif)
 12:34
 
