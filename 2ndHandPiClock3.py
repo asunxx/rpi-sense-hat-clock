@@ -119,7 +119,7 @@ number3x5 = [
  0,1,1,
  0,0,0,
  0,0,1, #10s and 20s "1"
- 0,0,1, #2x5 font
+ 0,0,1,
  0,0,1,
  0,0,1,
  0,0,1,
@@ -131,6 +131,16 @@ number3x5 = [
  0,1,1, #20s "3"
  0,0,1, #2x5 font
  0,1,0,
+ 0,0,1,
+ 0,1,0,
+ 0,1,0, #"4"
+ 0,1,1, #2x5 font
+ 0,1,1,
+ 0,0,1,
+ 0,0,1,
+ 0,1,1, #"5"
+ 0,1,0, #2x5 font
+ 0,1,1,
  0,0,1,
  0,1,0 ]
 
@@ -260,16 +270,19 @@ while True:
       elif d1 == 1:
         draw_digit(d1+10, dpos-2, red)  # narrow "1"
         dpos = dpos + 2
-      elif (d2 != 1 and (d1 == 2 or d1 == 3)):
+      elif (d2 != 1 and (d1 >= 2 and d1 <= 5)):
         if (r1mode == 0 or (2 <= d2 <= 3)):
-          draw_digit(d1+10, dpos-1, red)        # narrow "2" or "3"
+          draw_digit(d1+10, dpos-1, red)        # narrow digit
         else:
-          draw_digit(d1+10, dpos-1, magenta)    # narrow "2" or "3"
-        dpos = dpos + 2         # at space for next normal digit
+          draw_digit(d1+10, dpos-1, magenta)    # "2", "3", "4", "5"
+        dpos = dpos + 2         # at space for next digit
         if (r1mode == 0 and (d2 < 1 or d2 > 3)):
-          dpos = dpos + 1       # pass space for next normal digit
+          dpos = dpos + 1       # pass space for next digit
       else:
-        draw_digit(d1, dpos, red)       # normal "2" to "9"
+        if (d2 == 1 or (r1mode == 0 and (2 <= d2 <= 3))):
+          draw_digit(d1, dpos, red)     # normal digit
+        else:
+          draw_digit(d1, dpos, magenta) # "2" to "9"
         dpos = dpos + 2         # at overlap for next digit
         if (r1mode == 0 and d2 != 1):
           dpos = dpos + 1       # pass overlap for next digit
@@ -279,7 +292,7 @@ while True:
       elif (hour > 19 and 1 <= d2 <= 3):
         draw_digit(d2+10, dpos, red)
       else:
-        draw_digit(d2, dpos, red)
+        draw_digit(d2, dpos, red, yellow)
 
 # hours
     elif r2mode == 3:
