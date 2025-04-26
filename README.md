@@ -33,13 +33,13 @@ Linux raspberrypi 6.6.51+rpt-rpi-v7 #1 SMP Raspbian 1:6.6.51-1+rpt3 (2024-10-08)
 $
 $ # download 2ndHandPiClock3.py
 $ wget -nv https://github.com/asunxx/rpi-sense-hat-clock/raw/refs/heads/main/2ndHandPiClock3.py
-2025-04-10 14:58:42 URL:https://raw.githubusercontent.com/asunxx/rpi-sense-hat-clock/refs/heads/main/2ndHandPiClock3.py [9804/9804] -> "2ndHandPiClock3.py" [1]
+2025-04-21 13:14:33 URL:https://raw.githubusercontent.com/asunxx/rpi-sense-hat-clock/refs/heads/main/2ndHandPiClock3.py [10015/10015] -> "2ndHandPiClock3.py" [1]
 $ ls -l 2ndHandPiClock3.py
--rw-r--r-- 1 pi pi 9804 Apr 10 14:58 2ndHandPiClock3.py
+-rw-r--r-- 1 pi pi 10015 Apr 21 13:14 2ndHandPiClock3.py
 $
 $ # customize display options (optional)
 $ ed 2ndHandPiClock3.py
-9804
+10015
 /set_
 #   sense.set_rotation(90)      # Optional
 s/#/ /
@@ -47,12 +47,12 @@ s/90/180/
 .
     sense.set_rotation(180)      # Optional
 wq
-9805
+10016
 $
 $ # set executable
 $ chmod +x 2ndHandPiClock3.py
 $ ls -l 2ndHandPiClock3.py
--rwxr-xr-x 1 pi pi 9805 Apr 10 15:02 2ndHandPiClock3.py
+-rwxr-xr-x 1 pi pi 10016 Apr 21 13:16 2ndHandPiClock3.py
 $
 $ # start the clock in background with no hang up
 $ nohup ./2ndHandPiClock3.py &
@@ -60,9 +60,9 @@ $ nohup: ignoring input and appending output to 'nohup.out'
 
 $ # stop the clock
 $ ps -ef | grep 2ndHandPiClock3
-pi       19294 19293  2 15:16 pts/0    00:00:02 python ./2ndHandPiClock3.py
-pi       19310 19293  0 15:18 pts/0    00:00:00 grep 2ndHandPiClock3
-$ kill 19294
+pi        1601  1583  5 13:17 pts/1    00:00:01 python ./2ndHandPiClock3.py
+pi        1603  1583  0 13:17 pts/1    00:00:00 grep 2ndHandPiClock3
+$ kill 1601
 $
 ```
 
@@ -85,6 +85,62 @@ Digital hours time display:\
 Analog hours time display:\
 ![Screenshot of time display 10:10:40](assets/images/Clock3.time.10.10.40.png)
 10:10:40
+
+### Reading the Time of Day
+
+The clock continuously shows the exact time of day
+in hours, minutes, and seconds.
+When hours appear as digital numbers in red,
+reading them is straight forward.
+However, the clock can also display an analog hour hand.
+Minutes and seconds always appear in analog format,
+with format described below.
+
+#### Hours
+
+Hours Display - Analog Mode\
+![Diagram - Hour Hand](assets/images/clock3-dwg-hr.png)
+
+#### Minutes
+
+Minutes Display - Accumulation/Fill Mode\
+![Diagram - Minute Ring](assets/images/clock3-dwg-min.png)
+
+To show minutes, the clock fills the outline of a square ring with white color.
+The ring is located just inside the clock face's yellow border.
+It is empty at 0 minutes (the start of an hour),
+fills clockwise from the top center,
+and is full at 59 minutes past the hour.
+Each of 20 ring positions have a corresponding minute value (see diagram).
+The exact value shown applies when the ring and its head is all white.
+If a green dot leads a white dot at the ring's head,
+then it's one minute past the white position's minute value.
+If green trails white instead, it's one minute
+prior to the white position's minute value.
+
+The red hours digits may overlap and block parts of the minute ring.
+However, the clock will shift digit placement to avoid blocking the ring's head.
+
+#### Seconds
+
+Seconds Display - Walking Dot Mode\
+![Diagram - Second Ring](assets/images/clock3-dwg-sec.png)
+
+The clock face's yellow border is also the active region
+for displaying seconds.
+When enabled, a white and green clockwise walking dot
+pattern appears directly on this square ring and border.
+The color pattern and position of the dot(s) along this ring
+determine the seconds value in the current time of day.
+There are 20 ring positions each with corresponding seconds value (see diagram).
+Note the positions for 00, 15, 30, and 45 are double pixel,
+and each position represents 3 seconds.
+As with the minute ring display,
+when a green dot leads, or trails, a white dot, the
+actual seconds is +1, or -1, the white dot position's value
+respectively.
+
+### Clock Settings
 
 Second Hand Pi Clock supports multiple and separate settings for
 showing seconds, minutes, and hours.
@@ -112,6 +168,7 @@ showHour   = 1  #  0 disable
   #  3 analog
   # 1x 24 hour clock
 ```
+
 
 ## Digital Clock 3x4 ([DigitalClock3x4.py](DigitalClock3x4.py))
 
