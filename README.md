@@ -11,7 +11,7 @@ The project's primary design goal is to create
 a clock display on a 8x8 color dot matrix with time that is readable
 at a glance (one photo frame) without scrolling or flashing text.
 Digital clock digits tend to require 3x5 dot matrix fonts to be readable
-and few would fit on a 8x8 display.
+and too few would fit on a 8x8 display.
 Thus, display size is a major constraint and presents challenges
 to each of the clock designs.
 
@@ -78,11 +78,11 @@ analog minutes, and analog seconds.
 The clock's design shows a unique image for every second around the clock.
 Any exact hh:mm:ss time is visually discernable at any time.
 
-Digital hours time display:\
+Clock Dial with Digital Hours\
 ![Screenshot of time display 2:45:15](assets/images/Clock3.time.02.45.15.png)
 2:45:15
 
-Analog hours time display:\
+Clock Dial with Analog Hours\
 ![Screenshot of time display 10:10:40](assets/images/Clock3.time.10.10.40.png)
 10:10:40
 
@@ -96,23 +96,34 @@ However, the clock can also display an analog hour hand.
 Minutes and seconds always appear in analog format,
 with format described below.
 
-#### Hours
+#### Hours Display - Analog Mode
 
-Hours Display - Analog Mode\
 ![Diagram - Hour Hand](assets/images/clock3-dwg-hr.png)
 
-#### Minutes
+The clock draws a red line/bar from its center to its yellow border
+to simulate an hour hand similar to that of a traditional dial clock.
+The hour hand's tip is where it contacts the clock's border.
+This tip's position, relative to the clock's face,
+denotes the hour in the time of day.
+As with a dial clock, when the tip is pointed upward, right, downward, or left,
+the respective hour is 12, 3, 6, or 9.
 
-Minutes Display - Accumulation/Fill Mode\
+The hour hand will overlap with the minutes display
+depending on the time of day.
+Regardless, the hour hand's position and hence the time's hour
+remain discernable and unambiguous.
+
+#### Minutes Display - Accumulation/Fill Mode
+
 ![Diagram - Minute Ring](assets/images/clock3-dwg-min.png)
 
 To show minutes, the clock fills the outline of a square ring with white color.
-The ring is located just inside the clock face's yellow border.
-It is empty at 0 minutes (the start of an hour),
+This ring is located just inside the clock's yellow border.
+It is empty at 0 minutes at the start of an hour,
 fills clockwise from the top center,
 and is full at 59 minutes past the hour.
 Each of 20 ring positions have a corresponding minute value (see diagram).
-The exact value shown applies when the ring and its head is all white.
+The exact value shown applies when the ring to its head is all white.
 If a green dot leads a white dot at the ring's head,
 then it's one minute past the white position's minute value.
 If green trails white instead, it's one minute
@@ -121,18 +132,17 @@ prior to the white position's minute value.
 The red hours digits may overlap and block parts of the minute ring.
 However, the clock will shift digit placement to avoid blocking the ring's head.
 
-#### Seconds
+#### Seconds Display - Walking Dot Mode
 
-Seconds Display - Walking Dot Mode\
 ![Diagram - Second Ring](assets/images/clock3-dwg-sec.png)
 
-The clock face's yellow border is also the active region
+The clock's yellow border is also the active region
 for displaying seconds.
 When enabled, a white and green clockwise walking dot
 pattern appears directly on this square ring and border.
 The color pattern and position of the dot(s) along this ring
-determine the seconds value in the current time of day.
-There are 20 ring positions each with corresponding seconds value (see diagram).
+show seconds for the current time of day.
+There are 20 ring positions each with a corresponding seconds value (see diagram).
 Note the positions for 00, 15, 30, and 45 are double pixel,
 and each position represents 3 seconds.
 As with the minute ring display,
