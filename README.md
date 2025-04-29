@@ -11,7 +11,7 @@ The project's primary design goal is to create
 a clock display on a 8x8 color dot matrix with time that is readable
 at a glance (one photo frame) without scrolling or flashing text.
 Digital clock digits tend to require 3x5 dot matrix fonts to be readable
-and too few would fit on a 8x8 display.
+and too few would fit on an 8x8 display.
 Thus, display size is a major constraint and presents challenges
 to each of the clock designs.
 
@@ -105,13 +105,13 @@ to simulate an hour hand similar to that of a traditional dial clock.
 The hour hand's tip is where it contacts the clock's border.
 This tip's position, relative to the clock's face,
 denotes the hour in the time of day.
-As with a dial clock, when the tip is pointed upward, right, downward, or left,
+As with a dial clock, when the tip points upward, right, downward, or left,
 the respective hour is 12, 3, 6, or 9.
 
-The hour hand will overlap with the minutes display
+The hour hand overlaps with the minutes display
 depending on the time of day.
-Regardless, the hour hand's position and hence the time's hour
-remain discernable and unambiguous.
+Nevertheless, the hour hand's position and hence the time's hour
+remains discernable and unambiguous.
 
 #### Minutes Display - Accumulation/Fill Mode
 
@@ -120,7 +120,7 @@ remain discernable and unambiguous.
 To show minutes, the clock fills the outline of a square ring with white color.
 This ring is located just inside the clock's yellow border.
 It is empty at 0 minutes at the start of an hour,
-fills clockwise from the top center,
+fills clockwise from the top center (its 2 minute position),
 and is full at 59 minutes past the hour.
 Each of 20 ring positions have a corresponding minute value (see diagram).
 The exact value shown applies when the ring to its head is all white.
@@ -130,7 +130,8 @@ If green trails white instead, it's one minute
 prior to the white position's minute value.
 
 The red hours digits may overlap and block parts of the minute ring.
-However, the clock will shift digit placement to avoid blocking the ring's head.
+As a result, the clock will shift digit placement to avoid
+blocking the ring's head.
 
 #### Seconds Display - Walking Dot Mode
 
