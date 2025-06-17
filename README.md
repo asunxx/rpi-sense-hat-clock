@@ -2,32 +2,37 @@
 
 This project implements time of day clocks for a
 Raspberry Pi equipped with its official Sense Hat.
-The clocks utilize the Sense Hat's 8x8 RGB LED matrix
+The clocks utilize the Sense Hat's 8×8 RGB LED matrix
 to show the time.
 
 ![rpi3a-shat](assets/images/rpi3a-shat.jpg)
 
 The project's primary design goal is to create
-a clock display on a 8x8 color dot matrix with time that is readable
+a clock display on an 8×8 color dot matrix with time that is readable
 at a glance (one photo frame) without scrolling or flashing text.
-Digital clock digits tend to require 3x5 dot matrix fonts to be readable
-and too few would fit on an 8x8 display.
+Digital clock digits tend to require 3×5 dot matrix fonts to be readable
+and too few would fit on an 8×8 display.
 Thus, display size is a major constraint and presents challenges
 to each of the clock designs.
 
 There are three clock designs in this project:
-[2ndHandPiClock3.py](../../raw/refs/heads/main/2ndHandPiClock3.py),
-[DigitalClock3x4.py](../../raw/refs/heads/main/DigitalClock3x4.py), and
-[DigitalClock3x5.py](../../raw/refs/heads/main/DigitalClock3x5.py).
+Second Hand Pi Clock
+([2ndHandPiClock3.py](../../raw/refs/heads/main/2ndHandPiClock3.py)),
+Digital Clock 3×4
+([DigitalClock3x4.py](../../raw/refs/heads/main/DigitalClock3x4.py)), and
+Digital Clock 3×5
+([DigitalClock3x5.py](../../raw/refs/heads/main/DigitalClock3x5.py)).
 Second Hand Pi Clock is an analog/digital clock with
 minute and second "hands" and is this project's original creation.
 The two all digital clocks are based on other similar projects
 for Raspberry Pi or Arduino. 
 
 Each clock consists of a single standalone file with code written in python3.
-The clock code runs as is on the Raspberry Pi with Sense Hat hardware
-and Raspberry Pi OS or Raspbian operating system software.
+The clock code runs as is on the Raspberry Pi with Sense Hat hardware,
+with Raspberry Pi OS / Raspbian operating system software, and with
+the ```sense-hat``` package (usually pre-installed).
 ```
+$ # Raspbian GNU/Linux 12 (bookworm)
 $ uname -a
 Linux raspberrypi 6.6.51+rpt-rpi-v7 #1 SMP Raspbian 1:6.6.51-1+rpt3 (2024-10-08) armv7l GNU/Linux
 $
@@ -78,11 +83,11 @@ analog minutes, and analog seconds.
 The clock's design shows a unique image for every second around the clock.
 Any exact hh:mm:ss time is visually discernable at any time.
 
-Clock Dial with Digital Hours\
+Digital Hours Clock Display\
 ![Screenshot of time display 2:45:15](assets/images/Clock3.time.02.45.15.png)
 2:45:15
 
-Clock Dial with Analog Hours\
+Analog Hours Clock Display\
 ![Screenshot of time display 10:10:40](assets/images/Clock3.time.10.10.40.png)
 10:10:40
 
@@ -181,10 +186,10 @@ showHour   = 1  #  0 disable
 ```
 
 
-## Digital Clock 3x4 ([DigitalClock3x4.py](DigitalClock3x4.py))
+## Digital Clock 3×4 ([DigitalClock3x4.py](DigitalClock3x4.py))
 
 This is a 24 hour, four digit, digital clock.
-A 3x4 dot matrix forms two hours digits and two minutes digits.
+A 3×4 dot matrix forms two hours digits and two minutes digits.
 Hours and minutes digits have different colors
 (red and cyan respectively) to separate them for readablility
 since there's no bottom/top pixel spacing between them.
@@ -195,11 +200,11 @@ at the right edge of the display.
 18:23:29
 
 
-## Digital Clock 3x5 ([DigitalClock3x5.py](DigitalClock3x5.py))
+## Digital Clock 3×5 ([DigitalClock3x5.py](DigitalClock3x5.py))
 
-This is a 24 hour digital clock with clock digits formed with a 3x5 dot matrix.
+This is a 24 hour digital clock with clock digits formed with a 3×5 dot matrix.
 Clock digits for hours (red) must overlap with digits for minutes (green)
-when there's insufficient space to fit them on the 8x8 display matrix.
+when there's insufficient space to fit them on the 8×8 display matrix.
 The clock changes digit positions by the minute to minimize overlapping digits.
 And overlapping pixels use an alternate color pattern
 (alternating red/green or yellow) to distinguish the overlapping digits.
